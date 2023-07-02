@@ -2,33 +2,45 @@
     <br>
     <img src="images/icon.png" alt="Fay">
     <h1>FAY</h1>
-	<h3>数  字  人  Fay  控  制  器(这是元宇宙吗？)</h3>
+	<h3>Fay数字人助理</h3>
 </div>
 
 
-Fay是一个完整的开源项目，包含Fay控制器及数字人模型，可灵活组合出不同的应用场景：虚拟主播、现场推销货、商品导购、语音助理、远程语音助理、数字人互动、数字人面试官及心理测评、贾维斯、Her。开发人员可以利用该项目简单地构建各种类型的数字人或数字助理。该项目各模块之间耦合度非常低，包括声音来源、语音识别、情绪分析、NLP处理、情绪语音合成、语音输出和表情动作输出等模块。每个模块都可以轻松地更换。
+Fay数字人助理版是fay开源项目的重要分支，专注于构建智能数字助理的开源解决方案。它提供了灵活的模块化设计，使开发人员能够定制和组合各种功能模块，包括情绪分析、NLP处理、语音合成和语音输出等。Fay数字人助理版为开发人员提供了强大的工具和资源，用于构建智能、个性化和多功能的数字助理应用。通过该版本，开发人员可以轻松创建适用于各种场景和领域的数字人助理，为用户提供智能化的语音交互和个性化服务。
 
-## **推荐集成的开源仓库**
+## **推荐玩法**
 
-消费级pc大模型：https://github.com/THUDM/ChatGLM-6B 
 
-全平台抖音抓包：https://github.com/wwengg/douyin
+
+灵聚NLP api(支持GPT3.5及多应用)：https://m.bilibili.com/video/BV1NW4y1D76a
+
+集成本地唇型算法：https://www.bilibili.com/video/BV1Zh4y1g7o7/?buvid=XXDD0B5DD6C43C070DF9E7E67930FC48B24DF&is_story_h5=false&mid=Pvwl%2Ft1ahPM726k1L4%2FnRA%3D%3D&plat_id=202&share_from=ugc&share_medium=android&share_plat=android&share_source=WEIXIN&share_tag=s_i&timestamp=1686926382&unique_k=Jdqazy3&up_id=2111554564
+
+给数字人加上眼睛（集成yolo+VisualGLM)：B站视频
+
+给Fay加上本地免费语音识别（达摩院funaar）: https://www.bilibili.com/video/BV1qs4y1g74e/?share_source=copy_web&vd_source=64cd9062f5046acba398177b62bea9ad
+
+消费级pc大模型（ChatGLM-6B的基础上前置Rasa会话管理）：https://m.bilibili.com/video/BV1D14y1f7pr 
 
 UE5工程：https://github.com/xszyou/fay-ue5
 
-实时照片驱动集成：https://github.com/waityousea/xuniren
+真人视频三维重建（NeRF）：https://github.com/waityousea/xuniren
 
 
 
-## **一、Fay控制器用途**
+## **Fay数字人助理版**
+
+注：带货版移到分支[`fay-sales-edition`](https://github.com/TheRamU/Fay/tree/fay-sales-edition)
+
+![](images/controller.png)
+
+助理版Fay控制器使用：语音沟通，语音和文字回复；文字沟通，文字回复。
 
 
-![](images/kzq.jpg)
 
+### **PC远程助理**   [`PC demo`](https://github.com/TheRamU/Fay/tree/main/python_connector_demo)
 
-### **远程语音助理**   [`PC demo`](https://github.com/TheRamU/Fay/tree/main/python_connector_demo)
-
-### **远程语音助理**  [`android demo`](https://github.com/TheRamU/Fay/tree/main/android_connector_demo)
+### **手机远程助理**  [`android demo`](https://github.com/TheRamU/Fay/tree/main/android_connector_demo)
 
 
 
@@ -37,20 +49,25 @@ UE5工程：https://github.com/xszyou/fay-ue5
 
 控制器与采用 WebSocket 方式与 UE 通讯
 
-![](images/cs.png)
+![](images/UE.png)
 
 下载工程: [https://pan.baidu.com/s/1RBo2Pie6A5yTrCf1cn_Tuw?pwd=ck99](https://pan.baidu.com/s/1RBo2Pie6A5yTrCf1cn_Tuw?pwd=ck99)
 
-
 下载windows运行包: [https://pan.baidu.com/s/1CsJ647uV5rS2NjQH3QT0Iw?pwd=s9s8](https://pan.baidu.com/s/1CsJ647uV5rS2NjQH3QT0Iw?pwd=s9s8)
+
+
+
+
 
 ![](images/UElucky.png)
 
-工程及运行包：https://github.com/xszyou/fay-ue5
+工程：https://github.com/xszyou/fay-ue5
 
-**发您的Fay运行效果视频至公众号领取最新的UE5模型哦**
 
-通讯地址: [`ws://127.0.0.1:10002`](ws://127.0.0.1:10002)（已接通）
+
+重要：
+
+Fay（服务端）与数字人的通讯接口: [`ws://127.0.0.1:10002`](ws://127.0.0.1:10002)（已接通）
 
 消息格式: 查看 [WebSocket.md](https://github.com/TheRamU/Fay/blob/main/WebSocket.md)
 
@@ -72,20 +89,11 @@ UE5工程：https://github.com/xszyou/fay-ue5
 
 ## **二、Fay控制器核心逻辑**
 
-![](images/luoji.png)
+![](images/luoji.jpg)
 
  **注：**
 
-1、去API及会话管理功能将在下一版本发布；
-
-2、以上每个模块可轻易替换成自家核心产品。
-
-3、本地nlp（rasa+chatglm）的替换方法（https://m.bilibili.com/video/BV1D14y1f7pr?wxfid=o7omF0Vs6RIQFUGAzB6LXOBHa6Yg）：
-1、安装启动chatglm(github)
-2、安装rasa 包：rasa、rasa-sdk
-3、进入test/rasa目录启动actions：rasa run actions
-4、启动rasa api server：rasa run --enable-api -p 5006
-5、fay_core.py 引入nlp_rasa.py
+以上每个模块可轻易替换成自家核心产品。
 
 
 ### **目录结构**
@@ -99,16 +107,24 @@ UE5工程：https://github.com/xszyou/fay-ue5
 ├── ai_module
 │   ├── ali_nls.py			# 阿里云 实时语音
 │   ├── ms_tts_sdk.py       # 微软 文本转语音
+│   ├── nlp_lingju.py       # 灵聚 人机交互-自然语言处理
 │   ├── xf_aiui.py          # 讯飞 人机交互-自然语言处理
-│   ├── chatgpt.py          # gpt3.5对接
-│   ├── yuan_1_0.py          # 浪潮.源大模型对接
-│   └── xf_ltp.py           # 讯飞 性感分析
+│   ├── nlp_gpt.py          # gpt api对接
+│   ├── nlp_chatgpt.py      # chat.openai.com逆向对接
+│   ├── nlp_yuan.py         # 浪潮.源大模型对接
+│   ├── nlp_rasa.py         # ChatGLM-6B的基础上前置Rasa会话管理(强烈推荐)
+│   ├── nlp_VisualGLM.py    # 对接多模态大语言模型VisualGLM-6B
+│   ├── yolov8.py           # yolov8资态识别
+│   └── xf_ltp.py           # 讯飞 情感分析
 ├── bin                     # 可执行文件目录
 ├── core                    # 数字人核心
 │   ├── fay_core.py         # 数字人核心模块
 │   ├── recorder.py         # 录音器
 │   ├── tts_voice.py        # 语音生源枚举
-│   ├── viewer.py           # 抖音直播间接入模块
+│   ├── authorize_tb.py     # fay.db认证表管理
+│   ├── content_db.py       # fay.db内容表管理
+│   ├── interact.py         # 互动（消息）对象
+│   ├── song_player.py      # 音乐播放（暂不可用）
 │   └── wsa_server.py       # WebSocket 服务端
 ├── gui                     # 图形界面
 │   ├── flask_server.py     # Flask 服务端
@@ -117,77 +133,60 @@ UE5工程：https://github.com/xszyou/fay-ue5
 │   └── window.py           # 窗口模块
 ├── scheduler
 │   └── thread_manager.py   # 调度管理器
-└── utils                   # 工具模块
+├── utils                   # 工具模块
     ├── config_util.py      
     ├── storer.py
     └── util.py
+└── test                    # 都是惊喜
 ```
 
 
 ## **三、升级日志**
+**2023.06.28：**
 
-**2023.04：**
++ 重构NLP模块管理逻辑，便于自由扩展；
++ gpt：拆分为ChatGPT及GPT、更换新的GPT接口、可单独配置代理服务器；
++ 指定yolov8包版本，解决yolo不兼容问题；
++ 修复：自言自语bug、接收多个待处理消息bug。
 
-+ 抖音直播互动数据对接更换成系统代理抓包pd解码的方式（运行直播伴侣即可）；
-+ 提供本地nlp的对接代码(rasa+chatglm)；
-+ 修复若干逻辑及说明错误；
-+ 提高抖音字幕监听的稳定性及包兼容性；
-+ 更新gpt接口：局部接入代理、prompt上补充角色模拟及简化回复内容（感谢 江湖墨明）；
-+ 修复控制台输入测试消息的bug；
-+ 补充推荐两个优秀仓库：chatglm、全平台的抖音抓包。
+**2023.06.21：**
 
++ 集成灵聚NLP api(支持GPT3.5及多应用)；
++ ui修正。
 
+**2023.06.17：**
 
++ 集成本地唇型算法。
 
-**2023.03：**
+**2023.06.14：**
 
-+ 增加edge-tts语音合成（免费）可替换azure-tts(支持情绪化语音)；
-+ 替换flask发行版运行方式；
-+ web socket接口增加数字人文字内容同步，以便数人字可以远程运行；
-+ 优化数字人数据web socket同步逻辑；
-+ 更改gpt 3.5对接方式。
++ 解决多声道麦克风兼容问题；
++ 重构fay_core.py及fay_booter.py代码；
++ ui适应布局调整；
++ 恢复声音选择；
++ ”思考中...“显示逻辑修复。
 
-**2023.02：**
+**2023.05.27：**
 
-+ 提供chatgpt及yuan1.0作为选择。
++ 修复多个bug：消息框换行及空格问题、语音识别优化；
++ 彩蛋转正，Fay沟通与ChatGPT并行；
++ 加入yolov8姿态识别；
++ 加入VisualGLM-6B多模态单机离线大语言模型。
 
-**2023.01：**
+**2023.05.12：**
 
-+ 控制器pc内网穿透，音频输入输出设备远程直连；
-+ 提供android 音频输入输出工程示例代码；
-+ 提供python音频输入输出工程示例代码（远程PC、树莓派等可用）；
-+ 补传1.0语音指令音乐播放模块（暂不支持远程播放）；
-+ 重构及补充若干工具模块：websocket、多线程、缓冲器、音频流录制器等；
-+ 修复1.x版本的多个bug；
-+ 集成看板娘;
-
-**2022.12：**
-
-+ 上传bin目录（用于直播互动）；
-
-**2022.11：**
-
-+ 更新抖音直播获取粉丝互动数据的xpath;
-
-**2022.10.27：**
-
-+ 更新mac上的麦克风参数；
-+ 解决mac上无法重启问题；
-+ 上传brew安装脚本。
-
-**2022.10.17：**
-+ 更新语音指令；
-+ 补充人设语法；
-
-
++ 打出Fay数字人助理版作为主分支（带货版移到分支[`fay-sales-edition`](https://github.com/TheRamU/Fay/tree/fay-sales-edition)）；
++ 添加Fay助理的文字沟通窗口（文字与语音同步）；
++ 添加沟通记录本地保存功能；
++ 升级ChatGLM-6B的应用逻辑，长文本与语音回复分离。
 
 
 ## **四、安装说明**
 
 
 ### **环境** 
-- Python 3.8.0 +
-- Chrome 浏览器 (若不开启直播功能，可跳过)
+- Python 3.9、3.10
+- Windows、macos、linux
 
 ### **安装依赖**
 
@@ -211,13 +210,16 @@ python main.py
 
 | 代码模块                  | 描述                       | 链接                                                         |
 | ------------------------- | -------------------------- | ------------------------------------------------------------ |
-| ./ai_module/ali_nls.py    | 阿里云 实时语音识别        | https://ai.aliyun.com/nls/trans                              |
-| ./ai_module/ms_tts_sdk.py | 微软 文本转情绪语音（可选）   | https://azure.microsoft.com/zh-cn/services/cognitive-services/text-to-speech/ |
+| ./ai_module/ali_nls.py    | 实时语音识别（非必须，免费3个月,asr二选一）    | https://ai.aliyun.com/nls/trans                              |
+| ./ai_module/funasr.py    | 达摩院开源免费本地asr （非必须，asr二选一）   | fay/test/funasr/README.MD                           |
+| ./ai_module/ms_tts_sdk.py | 微软 文本转情绪语音（非必须，不配置时使用免费的edge-tts） | https://azure.microsoft.com/zh-cn/services/cognitive-services/text-to-speech/ |
 | ./ai_module/xf_ltp.py     | 讯飞 情感分析              | https://www.xfyun.cn/service/emotion-analysis                |
 | ./utils/ngrok_util.py     | ngrok.cc 外网穿透（可选）  | http://ngrok.cc                                              |
-| ./ai_module/yuan_1_0.py    | 浪潮源大模型（NLP 3选1）  | https://air.inspur.com/                                              |
-| ./ai_module/chatgpt.py     | ChatGPT（NLP 3选1）  | *******                                              |
-| ./ai_module/xf_aiui.py    | 讯飞自然语言处理（NLP 3选1）   | https://aiui.xfyun.cn/solution/webapi                        |
+| ./ai_module/nlp_lingju.py | 灵聚NLP api(支持GPT3.5及多应用)（NLP多选1） | https://open.lingju.ai   需联系客服务开通gpt3.5权限|
+| ./ai_module/yuan_1_0.py    | 浪潮源大模型（NLP 多选1） | https://air.inspur.com/                                              |
+| ./ai_module/chatgpt.py     | ChatGPT（NLP多选1） | *******                                              |
+| ./ai_module/nlp_rasa.py    | ChatGLM-6B的基础上前置Rasa会话管理（NLP 多选1）  | https://m.bilibili.com/video/BV1D14y1f7pr |
+| ./ai_module/nlp_VisualGLM.py | 对接VisualGLM-6B多模态单机离线大语言模型（NLP 多选1） | B站视频 |
 
 
 
@@ -226,47 +228,21 @@ python main.py
 
 ### **使用说明**
 
-+ 抖音虚拟主播：启动bin/Release_2.85/2.85.exe + fay控制器（抖音输入源开启、展板播放关闭）+ 数字人 + 抖音伴侣（测试时直接通过浏览器打开别人的直播间）；
-+ 现场推销货：fay控制器（展板播放关闭、填写商品信息）+ 数字人；
-+ 商品导购：fay控制器（麦克风输入源开启、展板播放关闭、填写商品信息、填写商品Q&A）+ 数字人；
-+ 语音助理：fay控制器（麦克风输入源开启、展板播放开启）；
-+ 远程语音助理：fay控制器（展板播放关闭）+ 远程设备接入；
-+ 数字人互动：fay控制器（麦克风输入源开启、展板播放关闭、填写性格Q&A）+ 数字人；
-+ 数字人面试官及心理测评：联系免费领取；
++ 语音助理：fay控制器（麦克风输入源开启、面板播放开启）；
++ 远程语音助理：fay控制器（面板播放关闭）+ 远程设备接入；
++ 数字人互动：fay控制器（麦克风输入源开启、面板播放关闭、填写性格Q&A）+ 数字人；
 + 贾维斯、Her：加入我们一起完成。
 
 
 ### **语音指令**
 
-- **关闭核心**
-  关闭
-  再见
-  你走吧
-- **静音**
-  静音
-  闭嘴
-  我想静静
-- **取消静音**
-  取消静音
-  你在哪呢？
-  你可以说话了
-- **播放歌曲**（网易音乐库不可用，寻找替代中）
-  播放歌曲
-  播放音乐
-  唱首歌
-  放首歌
-  听音乐
-  你会唱歌吗？
-- **暂停播放**
-  暂停播放
-  别唱了
-  我不想听了
+| 关闭核心                  | 静音                       | 取消静音                                                         |
+| ------------------------- | -------------------------- | ------------------------------------------------------------ |
+| 关闭、再见、你走吧   | 静音、闭嘴、我想静静        |   取消静音、你在哪呢、你可以说话了                            |
 
-
-### **图形界面**
-
-![](images/controller.png)
-
+| 播放歌曲(音乐库暂不可用)                  | 暂停播放                       | 更多                                                         |
+| ------------------------- | -------------------------- | ------------------------------------------------------------ |
+| 播放歌曲、播放音乐、唱首歌、放首歌、听音乐、你会唱歌吗   | 暂停播放、别唱了、我不想听了        |     没有了...                          |
 
 ### **人设**
 数字人属性，与用户交互中能做出相应的响应。
@@ -276,9 +252,9 @@ python main.py
 
 ### **接收来源**
 
-#### 抖音
+#### 文本输入
 
-填入直播间地址，实现与直播间粉丝交互
+通过沟通窗口与助理文本沟通
 
 #### 麦克风
 
@@ -289,21 +265,11 @@ python main.py
 可以接入远程音频输入，远程音频输出
 
 
-#### 商品栏
-
-填入商品介绍，数字人将自动讲解商品。
-
-当用户对商品有疑问时，数字人可自动跳转至对应商品并解答问题。
-
-配合抖音接收来源，实现直播间自动带货。
-
-
 
 ### 相关文章：
+1、集成消费级pc大模型（ChatGLM-6B的基础上前置Rasa会话管理）：https://m.bilibili.com/video/BV1D14y1f7pr 
 
-1、[(34条消息) 非常全面的数字人解决方案_郭泽斌之心的博客-CSDN博客_数字人算法](https://blog.csdn.net/aa84758481/article/details/124758727)
-
-2、[(34条消息) Fay数字人开源项目在mac 上的安装办法_郭泽斌之心的博客-CSDN博客](https://blog.csdn.net/aa84758481/article/details/127551258)
+2、[(34条消息) 非常全面的数字人解决方案_郭泽斌之心的博客-CSDN博客_数字人算法](https://blog.csdn.net/aa84758481/article/details/124758727)
 
 3、【开源项目：数字人FAY——Fay新架构使用讲解】 https://www.bilibili.com/video/BV1NM411B7Ab/?share_source=copy_web&vd_source=64cd9062f5046acba398177b62bea9ad
 
@@ -311,12 +277,14 @@ python main.py
 
 5、m1机器安装办法（Gason提供）：https://www.zhihu.com/question/437075754
 
+6、bilbil主页：[xszyou的个人空间_哔哩哔哩_bilibili](https://space.bilibili.com/2111554564)
 
 
 
-二次开发指导联系QQ 467665317
+商务联系QQ 467665317，我们提供：开发顾问、数字人模型定制及高校教学资源实施服务
+http://yafrm.com/forum.php?mod=viewthread&tid=302
 
-关注公众号获取最新微信技术交流群二维码（请先star本仓库）
+关注公众号(fay数字人)获取最新微信技术交流群二维码（**请先star本仓库**）
 
 ![](images/gzh.jpg)
 

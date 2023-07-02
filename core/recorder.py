@@ -4,11 +4,12 @@ import time
 from abc import abstractmethod
 
 from ai_module.ali_nls import ALiNls
+from ai_module.funasr import FunASR
 from core import wsa_server
 from scheduler.thread_manager import MyThread
 from utils import util
-
-
+from utils import config_util as cfg
+import numpy as np
 # 启动时间 (秒)
 _ATTACK = 0.2
 
@@ -27,12 +28,22 @@ class Recorder:
         self.__processing = False
         self.__history_level = []
         self.__history_data = []
-        self.__dynamic_threshold = 0.35 # 声音识别的音量阈值
+        self.__dynamic_threshold = 0.7 # 声音识别的音量阈值
 
         self.__MAX_LEVEL = 25000
         self.__MAX_BLOCK = 100
+        
+        #Edit by xszyou in 20230516:增加本地asr
+        self.ASRMode = cfg.ASR_mode
+        self.__aLiNls = self.asrclient()
 
-        self.__aLiNls = ALiNls()
+
+    def asrclient(self):
+        if self.ASRMode == "ali":
+            asrcli = ALiNls()
+        elif self.ASRMode == "funasr":
+            asrcli = FunASR()
+        return asrcli
 
     
 
@@ -62,7 +73,7 @@ class Recorder:
             text += "-"
         print(text + " [" + str(int(per * 100)) + "%]")
 
-    def __waitingResult(self, iat: ALiNls):
+    def __waitingResult(self, iat):
         if self.__fay.playing:
             return
         self.processing = True
@@ -93,6 +104,11 @@ class Recorder:
             data = stream.read(1024, exception_on_overflow=False)
             if not data:
                 continue
+            #只获取第一声道
+            data = np.frombuffer(data, dtype=np.int16)
+            data = np.reshape(data, (-1, cfg.config['source']['record']['channels']))  # reshaping the array to split the channels
+            mono = data[:, 0]  # taking the first channel
+            data = mono.tobytes()  
 
             level = audioop.rms(data, 2)
             if len(self.__history_data) >= 5:
@@ -117,7 +133,7 @@ class Recorder:
                     soon = True  #
                     isSpeaking = True  #用户正在说话
                     util.log(3, "聆听中...")
-                    self.__aLiNls = ALiNls()
+                    self.__aLiNls = self.asrclient()
                     try:
                         self.__aLiNls.start()
                     except Exception as e:
@@ -135,10 +151,7 @@ class Recorder:
                         self.__waitingResult(self.__aLiNls)
             if not soon and isSpeaking:
                 self.__aLiNls.send(data)
-
-        
-        
-        
+     
 
     def set_processing(self, processing):
         self.__processing = processing
@@ -158,4 +171,3 @@ class Recorder:
     @abstractmethod
     def get_stream(self):
         pass
-

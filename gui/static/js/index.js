@@ -1,5 +1,6 @@
 new Vue({
     el: '#app',
+    delimiters: ["[[", "]]"], 
     data() {
         return {
             testlist: [
@@ -19,6 +20,7 @@ new Vue({
             fileList: {},
             panel_msg: "",
             play_sound_enabled: false,
+            visualization_detection_enabled: false,
             source_liveRoom_enabled: false,
             source_liveRoom_url: '',
             source_record_enabled: false,
@@ -43,6 +45,7 @@ new Vue({
             items_data: [],
             live_state: 0,
             device_list: [],
+            send_msg:"",
             // device_list: [
             //     {
             //         value: '选项1',
@@ -70,10 +73,20 @@ new Vue({
                 name: '2',
                 content: 'Tab 2 content'
             }],
+            msg_list:[]
 
         }
     },
+    created() {
+        window.addEventListener('keydown', this.handkeyCode, true)//开启监听键盘按下事件
+    },
     methods: {
+         // 回车和空格键提交右侧信息
+        handkeyCode(e) {
+        if(e.keyCode === 13 && e.keyCode === 18){
+            this.send(1)
+        }
+        },
         handleTabsEdit(targetName, action) {
             if (action === 'add') {
                 let newTabName = ++this.tabIndex + '';
@@ -137,12 +150,12 @@ new Vue({
         },
         connectWS() {
             let _this = this;
-            let socket = new WebSocket('ws://localhost:10003')
+            socket = new WebSocket('ws://localhost:10003')
             socket.onopen = function () {
                 // console.log('客户端连接上了服务器');
             }
             socket.onmessage = function (e) {
-                // console.log(" --> " + e.data)
+                console.log(" --> " + e.data)
                 let data = JSON.parse(e.data)
                 _this.live_broadcast = (data.time % 2) === 0
                 let liveState = data.liveState
@@ -193,7 +206,11 @@ new Vue({
                             tips.classList.remove("waifu-tips-active");
                         }, 7000);
                     }
-
+                    //_this.getMsgList()
+                }
+                let panelReply = data.panelReply;
+                if(panelReply != undefined){
+                    _this.addMsg(panelReply)
                 }
             }
         },
@@ -217,6 +234,7 @@ new Vue({
                             let perception = interact["perception"]
                             let items = config["items"]
                             _this.play_sound_enabled = interact["playSound"]
+                            _this.visualization_detection_enabled = interact["visualization"]
                             _this.source_liveRoom_enabled = source["liveRoom"]["enabled"]
                             _this.source_liveRoom_url = source["liveRoom"]["url"]
                             _this.source_record_enabled = source["record"]["enabled"]
@@ -231,11 +249,11 @@ new Vue({
                             _this.attribute_hobby = attribute["hobby"]
                             _this.attribute_contact = attribute["contact"]
                             _this.attribute_voice = attribute["voice"]
-                            _this.interact_perception_gift = parseInt(perception["gift"])
+                            _this.interact_perception_gift = parseInt(perception["follow"])
                             _this.interact_perception_follow = perception["follow"]
-                            _this.interact_perception_join = perception["join"]
-                            _this.interact_perception_chat = perception["chat"]
-                            _this.interact_perception_indifferent = perception["indifferent"]
+                            _this.interact_perception_join = perception["follow"]
+                            _this.interact_perception_chat = perception["follow"]
+                            _this.interact_perception_indifferent = perception["follow"]
                             _this.interact_maxInteractTime = interact["maxInteractTime"]
                             _this.interact_QnA = interact["QnA"]
                             let item_data_list = []
@@ -299,14 +317,15 @@ new Vue({
                     },
                     "interact": {
                         "playSound": this.play_sound_enabled,
+                        "visualization": this.visualization_detection_enabled,
                         "QnA": this.interact_QnA,
                         "maxInteractTime": this.interact_maxInteractTime,
                         "perception": {
-                            "gift": this.interact_perception_gift,
+                            "gift": this.interact_perception_follow,
                             "follow": this.interact_perception_follow,
-                            "join": this.interact_perception_join,
-                            "chat": this.interact_perception_chat,
-                            "indifferent": this.interact_perception_indifferent
+                            "join": this.interact_perception_follow,
+                            "chat": this.interact_perception_follow,
+                            "indifferent": this.interact_perception_follow 
                         }
                     },
                     "items": [],
@@ -362,6 +381,19 @@ new Vue({
             xhr.open("post", url)
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
             xhr.send()
+            
+        },
+        postControlEyes() {
+            let url = "http://127.0.0.1:5000/api/control-eyes";
+            let xhr = new XMLHttpRequest()
+            xhr.open("post", url)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xhr.send()
+            if(this.visualization_detection_enabled){
+                this.visualization_detection_enabled = false
+            }else{
+                this.visualization_detection_enabled = true
+            }
         },
         isEmptyItem(data) {
             let isEmpty = true
@@ -436,11 +468,129 @@ new Vue({
                 type: 'success'
             });
         },
+        send(sendto) {
+            let _this = this;
+            let text = _this.send_msg;
+            if (!text) {
+                alert('请输入内容');
+                return;
+            }
+            let info = {
+                'content' : text ,
+                'timetext' : _this.getCurrentTime() ,
+                'type' : 'member' ,
+                'way' : 'send' 
+            } 
+            _this.msg_list.push(info);
+            this.timer = setTimeout(()=>{   //设置延迟执行
+                //滚动条置底
+               let height = document.querySelector('.content').scrollHeight;
+               document.querySelector(".content").scrollTop = height;
+           },1000)
+            _this.send_msg = ''
+            let url = "http://127.0.0.1:5000/api/send";
+            let send_data = {
+                "msg": text,
+                "sendto" : sendto
+            };
+      
+            let xhr = new XMLHttpRequest()
+            xhr.open("post", url)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xhr.send('data=' + encodeURIComponent(JSON.stringify(send_data)))
+            let executed = false
+            xhr.onreadystatechange = async function () {
+                if (!executed && xhr.status === 200) {
+                  // _this.getMsgList()
+                //    document.querySelector('#textarea').value = '';
+                //    document.querySelector('#textarea').focus();
+                   
+                }
+            }
+           
+            // // text = text.replace(/\s/g, "<br/>");
+            // text = text.replace(/\n/g, "<br/>");
+            // text = text.replace(/\r\n/g, "<br/>");
+            // let item = document.createElement('div');
+            // item.className = 'item item-right';
+            // item.innerHTML = `<div class="bubble bubble-right">${text}</div><div class="avatar"><img src="static/from.jpg" /></div>`;
+            // document.querySelector('.content').appendChild(item);
+            // document.querySelector('#textarea').value = '';
+            // document.querySelector('#textarea').focus();
+            // //滚动条置底
+            // let height = document.querySelector('.content').scrollHeight;
+            // document.querySelector(".content").scrollTop = height;
+        },
+        getMsgList(){
+            let _this = this;
+            
+            let url = "http://127.0.0.1:5000/api/get-msg";
+            let xhr = new XMLHttpRequest()
+            xhr.open("post", url)
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xhr.send()
+            let executed = false
+            xhr.onreadystatechange = async function () {
+                if (!executed && xhr.status === 200) {
+                    try {
+                        if (xhr.responseText.length > 0) {
+                            let data = await eval('(' + xhr.responseText + ')')
+                            _this.msg_list = data['list'];
+                               
+                            //滚动条置底
+                            let height = document.querySelector('.content').scrollHeight;
+                            document.querySelector(".content").scrollTop = height;
+                            this.timer = setTimeout(()=>{   //设置延迟执行
+                                //滚动条置底
+                               let height = document.querySelector('.content').scrollHeight;
+                               document.querySelector(".content").scrollTop = height;
+                           },1000)
+                        }
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+        },
+        addMsg(data){
+            let _this = this;
+            let info = {
+                'content' : data['content'] ,
+                'timetext' :  _this.getCurrentTime() ,
+                'type' : data['type'] ,
+                'way' : 'send' 
+            } 
+            _this.msg_list.push(info);
+            
+            this.timer = setTimeout(()=>{   //设置延迟执行
+                 //滚动条置底
+                let height = document.querySelector('.content').scrollHeight;
+                document.querySelector(".content").scrollTop = height;
+            },1000)
+             
+
+        },
+        getCurrentTime() {
+            //获取当前时间并打印
+            var _this = this;
+            let yy = new Date().getFullYear();
+            let mm = new Date().getMonth()+1<10 ? '0'+parseInt(new Date().getMonth()+1) : new Date().getMonth()+1;
+            let dd = new Date().getDate()<10 ? '0'+new Date().getDate() : new Date().getDate();
+            let hh = new Date().getHours()<10 ? '0'+new Date().getHours() : new Date().getHours();
+            let mf = new Date().getMinutes()<10 ? '0'+new Date().getMinutes() : new Date().getMinutes();
+            let ss = new Date().getSeconds()<10 ? '0'+new Date().getSeconds() : new Date().getSeconds();
+            let gettime = yy+'-'+mm+'-'+dd+' '+hh+':'+mf+':'+ss;
+            return gettime;
+           
+        }
+
     },
     mounted() {
         let _this = this;
         _this.getData();
-        _this.connectWS()
+        _this.getMsgList();
+        _this.connectWS();
+
         // _this.runnnable()
         // _this.items_data.push({});
     },

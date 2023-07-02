@@ -12,8 +12,6 @@ key_ali_nls_key_secret = None
 key_ali_nls_app_key = None
 key_ms_tts_key = None
 Key_ms_tts_region = None
-key_xf_aiui_app_id = None
-key_xf_aiui_api_key = None
 key_xf_ltp_app_id = None
 key_xf_ltp_api_key = None
 key_ngrok_cc_id = None
@@ -21,6 +19,13 @@ key_yuan_1_0_account = None
 key_yuan_1_0_phone = None
 key_chatgpt_api_key = None
 key_chat_module = None
+key_gpt_access_token = None
+key_gpt_conversation_id = None
+proxy_config = None
+
+ASR_mode = None
+local_asr_ip = None 
+local_asr_port = None 
 
 def load_config():
     global config
@@ -30,8 +35,6 @@ def load_config():
     global key_ali_nls_app_key
     global key_ms_tts_key
     global key_ms_tts_region
-    global key_xf_aiui_app_id
-    global key_xf_aiui_api_key
     global key_xf_ltp_app_id
     global key_xf_ltp_api_key
     global key_ngrok_cc_id
@@ -39,6 +42,15 @@ def load_config():
     global key_yuan_1_0_phone
     global key_chatgpt_api_key
     global key_chat_module
+    global key_gpt_access_token
+    global key_gpt_conversation_id
+    global key_lingju_api_key
+    global key_lingju_api_authcode
+    global proxy_config
+
+    global ASR_mode
+    global local_asr_ip 
+    global local_asr_port
 
     system_config = ConfigParser()
     system_config.read('system.conf', encoding='UTF-8')
@@ -47,8 +59,6 @@ def load_config():
     key_ali_nls_app_key = system_config.get('key', 'ali_nls_app_key')
     key_ms_tts_key = system_config.get('key', 'ms_tts_key')
     key_ms_tts_region  = system_config.get('key', 'ms_tts_region')
-    key_xf_aiui_app_id = system_config.get('key', 'xf_aiui_app_id')
-    key_xf_aiui_api_key = system_config.get('key', 'xf_aiui_api_key')
     key_xf_ltp_app_id = system_config.get('key', 'xf_ltp_app_id')
     key_xf_ltp_api_key = system_config.get('key', 'xf_ltp_api_key')
     key_ngrok_cc_id = system_config.get('key', 'ngrok_cc_id')
@@ -56,6 +66,16 @@ def load_config():
     key_yuan_1_0_phone = system_config.get('key', 'yuan_1_0_phone')
     key_chatgpt_api_key = system_config.get('key', 'chatgpt_api_key')
     key_chat_module = system_config.get('key', 'chat_module')
+    key_gpt_access_token = system_config.get('key', 'gpt_access_token')
+    key_gpt_conversation_id = system_config.get('key', 'gpt_conversation_id')
+    key_lingju_api_key = system_config.get('key', 'lingju_api_key')
+    key_lingju_api_authcode = system_config.get('key', 'lingju_api_authcode')
+
+    ASR_mode = system_config.get('key', 'ASR_mode')
+    local_asr_ip = system_config.get('key', 'local_asr_ip')
+    local_asr_port = system_config.get('key', 'local_asr_port')
+
+    proxy_config = system_config.get('key', 'proxy_config')
 
     config = json.load(codecs.open('config.json', encoding='utf-8'))
 
