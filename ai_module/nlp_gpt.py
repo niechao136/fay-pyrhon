@@ -14,7 +14,7 @@ def question(cont):
         )
         completion = client.chat.completions.create(
             # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-            model="qwen-max",
+            model="qwen-plus-2025-07-28",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": cont},
