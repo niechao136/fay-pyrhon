@@ -2,6 +2,7 @@ import socket
 import pyaudio
 import time
 import pygame
+import os
 
 import thread_manager
 
@@ -35,6 +36,9 @@ def receive_audio(client):
                     break
             print("receive audio end:{}".format(len(filedata)), end="")
 
+            # 确保目录存在
+            os.makedirs("sample", exist_ok=True)
+
             filename = "sample/recv_{}.mp3".format(time.time())
             with open(filename, "wb") as f:
                 f.write(filedata)
@@ -47,7 +51,7 @@ def receive_audio(client):
 
 if __name__ == "__main__":
     client = socket.socket()
-    client.connect(("192.168.1.101", 10001))
+    client.connect(("172.21.188.91", 10001))
     pygame.mixer.init()
     thread_manager.MyThread(target=send_audio, args=(client,)).start()
     thread_manager.MyThread(target=receive_audio, args=(client,)).start()

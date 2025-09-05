@@ -15,6 +15,10 @@ from core.content_db import Content_Db
 import sys
 sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+os.environ['PATH'] += os.pathsep + os.path.join(current_dir, "test", "ovr_lipsync", "ffmpeg", "bin")
+os.environ['PATH'] += os.pathsep + os.path.join(current_dir, "test", "ovr_lipsync", "ovr_lipsync_exe")
+
 def __clear_samples():
     if not os.path.exists("./samples"):
         os.mkdir("./samples")

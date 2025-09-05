@@ -1,9 +1,19 @@
 import subprocess
 import time
 import os
-os.environ['PATH'] += os.pathsep + os.path.join(os.getcwd(), "test", "ovr_lipsync", "ffmpeg", "bin")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+os.environ['PATH'] += os.pathsep + os.path.join(current_dir, "ffmpeg", "bin")
+os.environ['PATH'] += os.pathsep + os.path.join(current_dir, "ovr_lipsync_exe")
 from pydub import AudioSegment
 import json
+
+# 获取当前文件的目录
+ffmpeg_path = os.path.join(current_dir, "ffmpeg", "bin", "ffmpeg.exe")
+ffprobe_path = os.path.join(current_dir, "ffmpeg", "bin", "ffprobe.exe")
+
+# 告诉 pydub 使用这个 ffmpeg
+AudioSegment.converter = ffmpeg_path
+AudioSegment.ffprobe = ffprobe_path
 
 def list_files(dir_path):
     for root, dirs, files in os.walk(dir_path):
@@ -17,7 +27,7 @@ class LipSyncGenerator:
           "kk", "CH", "SS", "nn", "RR",
           "aa", "E", "ih", "oh", "ou"]
         self.viseme = []
-        self.exe_path = "test\\ovr_lipsync\\ovr_lipsync_exe\\ProcessWAV.exe"
+        self.exe_path = os.path.join(current_dir, "ovr_lipsync_exe", "ProcessWAV.exe")
 
     def convert_mp3_to_wav(self, mp3_filepath):
         audio = AudioSegment.from_mp3(mp3_filepath)
@@ -46,12 +56,14 @@ class LipSyncGenerator:
 
     def generate_visemes(self, mp3_filepath):
         
+        try:
+            wav_filepath = self.convert_mp3_to_wav(mp3_filepath)
+            arguments = ["--print-viseme-name", wav_filepath]
+            viseme = self.run_exe_and_get_output(arguments)
 
-        wav_filepath = self.convert_mp3_to_wav(mp3_filepath)
-        arguments = ["--print-viseme-name", wav_filepath]
-        self.run_exe_and_get_output(arguments)
-        
-        return self.filter(self.viseme)
+            return self.filter(self.viseme)
+        except Exception as e:
+            print(e)
         
     def consolidate_visemes(self, viseme_list):
         if not viseme_list:
@@ -83,7 +95,7 @@ class LipSyncGenerator:
 if __name__ == "__main__":
     start_time = time.time()
     lip_sync_generator = LipSyncGenerator()
-    viseme_list = lip_sync_generator.generate_visemes("C:\\Users\\Administrator\\Documents\\GitHub\\Fay\\bin\\x64-Debug\\fay.mp3")
+    viseme_list = lip_sync_generator.generate_visemes("D:\\app\\Fay-python-shuziren\\ai_module\\samples\\sample-1757066057945.mp3")
     consolidated_visemes = lip_sync_generator.consolidate_visemes(viseme_list)
     print(json.dumps(consolidated_visemes))
     print(time.time() - start_time)
